@@ -33,13 +33,14 @@ export function Canvas() {
 
       const reactFlowNodes: Node[] = storeNodes.map((node) => ({
         id: node.id,
-        type: "processNode",
+        type: node.type,
         position: positionMap.get(node.id) || {
           x: Math.random() * 400,
           y: Math.random() * 400,
         },
         data: node as unknown as Record<string, unknown>,
       }));
+      console.log("rr", storeNodes);
 
       return reactFlowNodes;
     });

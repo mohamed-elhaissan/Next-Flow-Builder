@@ -12,7 +12,7 @@ export function ActionButtons() {
         <ArrowUpFromLine />
         Load
       </Button>
-      <Button className="cursor-pointer" size={"sm"} variant={"secondary"}>
+      <Button className="cursor-pointer" size={"sm"}>
         <Play />
         Execute
       </Button>

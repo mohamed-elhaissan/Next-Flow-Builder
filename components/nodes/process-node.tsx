@@ -37,5 +37,3 @@ export const ProcessNode = memo(
     );
   }
 );
-
-ProcessNode.displayName = "ProcessNode";

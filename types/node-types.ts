@@ -14,6 +14,7 @@ export const nodeTypes = {
 
 interface IInput {
   id: string;
+  type: string;
   data: {
     label: string;
     desc: string;
@@ -43,6 +44,7 @@ interface IProcess {
     processTypes: string;
     jsonFormat: string;
   };
+  type: string;
 }
 interface ICode {
   id: string;
@@ -52,6 +54,7 @@ interface ICode {
     language: "Javascript" | "Typescript";
     code: string;
   };
+  type: string;
 }
 interface ICondition {
   id: string;
@@ -62,6 +65,7 @@ interface ICondition {
     truePath: boolean;
     falsePath: boolean;
   };
+  type: string;
 }
 
 export type customNode = IInput | IOutput | ICondition | ICode | IProcess;
