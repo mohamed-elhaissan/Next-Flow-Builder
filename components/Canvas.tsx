@@ -17,6 +17,9 @@ import {
 import "@xyflow/react/dist/style.css";
 import { nodeTypes } from "../types/node-types";
 import { useFlowStore } from "@/store/store";
+import { Html } from "next/document";
+import { toast } from "sonner";
+import { useDropHandler } from "@/hooks/useDropHandler";
 
 const initialEdges: Edge[] = [];
 
@@ -24,6 +27,7 @@ export function Canvas() {
   const { nodes: storeNodes } = useFlowStore();
   const [nodes, setNodes] = useState<Node[]>([]);
   const [edges, setEdges] = useState(initialEdges);
+  const { onDrop } = useDropHandler();
 
   useEffect(() => {
     setNodes((currentNodes) => {
@@ -51,6 +55,10 @@ export function Canvas() {
       setNodes((nds) => applyNodeChanges(changes, nds)),
     []
   );
+  const onDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+  };
 
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) =>
@@ -68,6 +76,8 @@ export function Canvas() {
       <ReactFlow
         nodes={nodes}
         edges={edges}
+        onDrop={onDrop}
+        onDragOver={onDragOver}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}

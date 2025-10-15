@@ -15,12 +15,14 @@ import { Button } from "./ui/button";
 import { useFlowStore } from "@/store/store";
 import { useCallback } from "react";
 import { DragEvent } from "react";
+import { ModeToggle } from "./theme-toggle";
 
 export function SideBar() {
-  const { addNode, nodes } = useFlowStore();
+  const { addNode } = useFlowStore();
   const nodesLibrary = [
     {
       icon: Database,
+
       action() {
         addNode({
           id: `input-${Date.now()}`,
@@ -160,41 +162,55 @@ export function SideBar() {
     e.dataTransfer.effectAllowed = "move";
   }, []);
   return (
-    <div className="w-72 text-[#d4d4d4] flex flex-col gap-5 p-4 border-r border-white/[.09]">
-      <h1 className="scroll-m-20   text-2xl font-extrabold tracking-tight text-balance">
-        Workflow Nodes
-      </h1>
-      <div className="flex flex-col ">
-        <span className="text-sm opacity-50">Menu</span>
-        {nodesLibrary.map((item) => {
-          return (
-            <Button
-              draggable={!item.isDisable}
-              onDoubleClick={() => item.action?.()}
-              onDragStart={(e) => onDragItem(e, "codeNode")}
-              size={"lg"}
-              disabled={item.isDisable}
-              key={item.title}
-              variant={"outline"}
-              className={`justify-start my-1 border border-white/[0.08]  h-12 ${
-                item.isDisable
-                  ? "cursor-not-allowed opacity-50"
-                  : " cursor-grab"
-              }`}
-            >
-              <item.icon className="h-5 w-5" />
-              <div className="flex items-start  justify-start flex-col">
-                <span>{item.title}</span>
-                <span className="text-zinc-400 text-sm">{item.desc}</span>
-              </div>
-            </Button>
-          );
-        })}
+    <div className="w-72 text-[#d4d4d4] flex flex-col justify-between gap-5 p-4 border-r dark:border-white/[.09] border-black/[0.09]">
+      <div className="flex flex-col gap-5">
+        <h1 className="scroll-m-20 text-black dark:text-[#e5e5e5]   text-2xl font-extrabold tracking-tight text-balance">
+          Workflow Nodes
+        </h1>
+        <div className="flex flex-col ">
+          <span className="text-sm opacity-50 text-black dark:text-[#e5e5e5]">
+            Menu
+          </span>
+          {nodesLibrary.map((item) => {
+            return (
+              <Button
+                draggable={!item.isDisable}
+                onDoubleClick={() => item.action?.()}
+                onDragStart={(e) =>
+                  onDragItem(
+                    e,
+                    item.title == "Conditional"
+                      ? "conditionNode"
+                      : item.title.toLowerCase() + "Node"
+                  )
+                }
+                size={"lg"}
+                disabled={item.isDisable}
+                key={item.title}
+                variant={"outline"}
+                className={`justify-start my-1 border border-black/[0.08] dark:border-white/[0.08]  h-12 ${
+                  item.isDisable
+                    ? "cursor-not-allowed opacity-50"
+                    : " cursor-grab"
+                }`}
+              >
+                <item.icon className="h-5 w-5 text-black dark:text-[#e5e5e5]" />
+                <div className="flex items-start  justify-start flex-col">
+                  <span className="text-black dark:text-[#e5e5e5]">
+                    {item.title}
+                  </span>
+                  <span className="text-gray-500 text-sm">{item.desc}</span>
+                </div>
+              </Button>
+            );
+          })}
+        </div>
+        <span className="text-sm opacity-50 text-black">
+          Drag and drop or double click nodes onto the canvas to build your
+          workflow
+        </span>
       </div>
-      <span className="text-sm opacity-50">
-        Drag and drop or double click nodes onto the canvas to build your
-        workflow
-      </span>
+      <ModeToggle />
     </div>
   );
 }
