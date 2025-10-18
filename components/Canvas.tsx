@@ -5,7 +5,6 @@ import {
   ReactFlow,
   applyEdgeChanges,
   addEdge,
-  Controls,
   Background,
   Node,
   Edge,
@@ -13,13 +12,14 @@ import {
   EdgeChange,
   NodeChange,
   applyNodeChanges,
+  NodeTypes,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { nodeTypes } from "../types/node-types";
+import { customNode, nodeTypes } from "../types/node-types";
 import { useFlowStore } from "@/store/store";
-import { Html } from "next/document";
-import { toast } from "sonner";
+
 import { useDropHandler } from "@/hooks/useDropHandler";
+import { NodeConfigPanel } from "./node-config-panel";
 
 const initialEdges: Edge[] = [];
 
@@ -27,6 +27,7 @@ export function Canvas() {
   const { nodes: storeNodes } = useFlowStore();
   const [nodes, setNodes] = useState<Node[]>([]);
   const [edges, setEdges] = useState(initialEdges);
+  const [selectedNode, setSelectedNode] = useState<string | null>(null);
   const { onDrop } = useDropHandler();
 
   useEffect(() => {
@@ -44,7 +45,6 @@ export function Canvas() {
         },
         data: node as unknown as Record<string, unknown>,
       }));
-      console.log("rr", storeNodes);
 
       return reactFlowNodes;
     });
@@ -75,6 +75,9 @@ export function Canvas() {
     <div className="w-full h-full">
       <ReactFlow
         nodes={nodes}
+        // onNodeDoubleClick={(e, node) => {
+        //   setSelectedNode(node.type);
+        // }}
         edges={edges}
         onDrop={onDrop}
         onDragOver={onDragOver}
@@ -86,6 +89,11 @@ export function Canvas() {
       >
         <Background />
       </ReactFlow>
+      {selectedNode && (
+        <div className=" absolute right-0 top-[20%] dark:bg-[#060709] p-4 rounded-md border">
+          {/* <NodeConfigPanel node={selectedNode} /> */}
+        </div>
+      )}
     </div>
   );
 }
