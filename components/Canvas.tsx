@@ -27,7 +27,7 @@ export function Canvas() {
   const { nodes: storeNodes } = useFlowStore();
   const [nodes, setNodes] = useState<Node[]>([]);
   const [edges, setEdges] = useState(initialEdges);
-  const [selectedNode, setSelectedNode] = useState<string | null>(null);
+  const [selectedNode, setSelectedNode] = useState<Node | null>(null);
   const { onDrop } = useDropHandler();
 
   useEffect(() => {
@@ -75,9 +75,9 @@ export function Canvas() {
     <div className="w-full h-full">
       <ReactFlow
         nodes={nodes}
-        // onNodeDoubleClick={(e, node) => {
-        //   setSelectedNode(node.type);
-        // }}
+        onNodeDoubleClick={(e, node) => {
+          setSelectedNode(node);
+        }}
         edges={edges}
         onDrop={onDrop}
         onDragOver={onDragOver}
@@ -91,7 +91,7 @@ export function Canvas() {
       </ReactFlow>
       {selectedNode && (
         <div className=" absolute right-0 top-[20%] dark:bg-[#060709] p-4 rounded-md border">
-          {/* <NodeConfigPanel node={selectedNode} /> */}
+          <NodeConfigPanel node={selectedNode} />
         </div>
       )}
     </div>
