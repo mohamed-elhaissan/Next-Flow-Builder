@@ -207,7 +207,7 @@ export function NodeConfigPanel({ node, onClose }: NodeConfigPanelProps) {
   };
 
   return (
-    <div className="h-full flex flex-col w-md ">
+    <div className="h-full flex flex-col w-sm md:w-md ">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold">
           Configure {(node as any).data.data.label}
