@@ -68,4 +68,4 @@ interface ICondition {
   type: string;
 }
 
-export type customNode = IInput | IOutput | ICondition | ICode | IProcess;
+export type customNode = (IInput | IOutput | ICondition | ICode | IProcess) & Record<string, unknown>;

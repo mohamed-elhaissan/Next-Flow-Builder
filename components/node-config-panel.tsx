@@ -16,49 +16,76 @@ import {
 import { Switch } from "@/components/ui/switch";
 import CodeEditor from "./code-editor";
 import { Node } from "@xyflow/react";
+import { customNode } from "@/types/node-types";
+import { toast } from "sonner";
 
 interface NodeConfigPanelProps {
-  node: Node;
-  //   updateNodeData: (nodeId: string, data: any) => void;
-  //   onClose: () => void;
+  node: Node<customNode>;
+  onClose: () => void;
 }
 
-export function NodeConfigPanel({
-  node,
-}: //   updateNodeData,
-//   onClose,
-NodeConfigPanelProps) {
-  //   const [localData, setLocalData] = useState({ ...node.data });
+export function NodeConfigPanel({ node, onClose }: NodeConfigPanelProps) {
+  console.log("those are nodes", node);
+  const data = node.data.data;
 
   const renderInputFields = () => {
     switch (node.type) {
       case "inputNode":
         return (
-          <div className="flex flex-col gap-2">
-            <div className="space-y-2">
-              <Label htmlFor="dataSource">Data Source</Label>
-              <Select>
-                <SelectTrigger id="dataSource">
-                  <SelectValue placeholder="Select data source" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="manual">Manual Input</SelectItem>
-                  <SelectItem value="api">API</SelectItem>
-                  <SelectItem value="database">Database</SelectItem>
-                  <SelectItem value="file">File Upload</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          <>
+            <div className="space-y-4 flex-1 overflow-y-auto">
+              <div className="space-y-2">
+                <Label htmlFor="label">Node Label</Label>
+                <Input
+                  value={data.label}
+                  id="label"
+                  onChange={(e) => {
+                    null;
+                  }}
+                />
+              </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="sampleData">Sample Data (JSON)</Label>
-              <Textarea
-                id="sampleData"
-                className="h-32"
-                placeholder='{"key": "value"}'
-              />
+              <div className="space-y-2">
+                <Label htmlFor="description">Description</Label>
+                <Textarea
+                  id="description"
+                  placeholder="Describe what this node does"
+                />
+              </div>
+
+              <div className="flex items-center space-x-2 py-2">
+                <Switch id="required" />
+                <Label htmlFor="required">Required Node</Label>
+              </div>
+
+              <div className="border-t border-gray-200 my-4"></div>
             </div>
-          </div>
+            <div className="flex flex-col gap-2">
+              <div className="space-y-2">
+                <Label htmlFor="dataSource">Data Source</Label>
+                <Select>
+                  <SelectTrigger id="dataSource">
+                    <SelectValue placeholder="Select data source" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="manual">Manual Input</SelectItem>
+                    <SelectItem value="api">API</SelectItem>
+                    <SelectItem value="database">Database</SelectItem>
+                    <SelectItem value="file">File Upload</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="sampleData">Sample Data (JSON)</Label>
+                <Textarea
+                  id="sampleData"
+                  className="h-32"
+                  placeholder='{"key": "value"}'
+                />
+              </div>
+            </div>
+          </>
         );
 
       case "outputNode":
@@ -180,41 +207,29 @@ NodeConfigPanelProps) {
   };
 
   return (
-    <div className="h-full flex flex-col w-md">
+    <div className="h-full flex flex-col w-md ">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-semibold">Configure {}</h2>
-        <Button variant="ghost" size="icon">
+        <h2 className="text-lg font-semibold">
+          Configure {(node as any).data.data.label}
+        </h2>
+        <Button onClick={onClose} variant="ghost" size="icon">
           <X className="h-4 w-4" />
         </Button>
       </div>
 
-      <div className="space-y-4 flex-1 overflow-y-auto">
-        <div className="space-y-2">
-          <Label htmlFor="label">Node Label</Label>
-          <Input id="label" />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="description">Description</Label>
-          <Textarea
-            id="description"
-            placeholder="Describe what this node does"
-          />
-        </div>
-
-        <div className="flex items-center space-x-2 py-2">
-          <Switch id="required" />
-          <Label htmlFor="required">Required Node</Label>
-        </div>
-
-        <div className="border-t border-gray-200 my-4"></div>
-      </div>
       {renderInputFields()}
-      <Button className="mt-2">
+      <Button
+        onClick={() => {
+          toast.success("We will Offer this service soon :)");
+        }}
+        className="mt-2"
+      >
         <Save />
         Save
       </Button>
-      <Button variant={"ghost"}>Cancel</Button>
+      <Button onClick={onClose} variant={"ghost"}>
+        Cancel
+      </Button>
     </div>
   );
 }

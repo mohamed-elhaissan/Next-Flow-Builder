@@ -27,7 +27,9 @@ export function Canvas() {
   const { nodes: storeNodes } = useFlowStore();
   const [nodes, setNodes] = useState<Node[]>([]);
   const [edges, setEdges] = useState(initialEdges);
-  const [selectedNode, setSelectedNode] = useState<Node | null>(null);
+  const [selectedNode, setSelectedNode] = useState<Node<customNode> | null>(
+    null
+  );
   const { onDrop } = useDropHandler();
 
   useEffect(() => {
@@ -90,8 +92,11 @@ export function Canvas() {
         <Background />
       </ReactFlow>
       {selectedNode && (
-        <div className=" absolute right-0 top-[20%] dark:bg-[#060709] p-4 rounded-md border">
-          <NodeConfigPanel node={selectedNode} />
+        <div className=" absolute right-0 top-[20%] dark:bg-[#060709] bg-white shadow p-4 rounded-md border">
+          <NodeConfigPanel
+            node={selectedNode}
+            onClose={() => setSelectedNode(null)}
+          />
         </div>
       )}
     </div>
